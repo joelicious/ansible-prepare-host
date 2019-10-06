@@ -1,0 +1,18 @@
+---
+# This role installs kvm-networking and configures it.
+
+- set_fact:
+    bridge_slave: "{{ ansible_interfaces | difference(['lo','br0']) | first }}"
+
+- name: Add new connection to the network configuration.
+  nmcli: 
+    state: present
+    type: bridge
+    conn_name: br0
+
+- name: Establish bridge slave interface between physical and bridge
+  nmcli: 
+    state: present
+    type: bridge-slave
+    conn_name: "{{ bridge_slave }}"
+    master: br0

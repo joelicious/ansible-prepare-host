@@ -1,0 +1,11 @@
+---
+## This playbook configures a host for provisioning openshift
+
+# Configure 
+- name: configure kvm-networking
+  hosts: playground
+  remote_user: "{{ remote_user }}"
+  become: yes
+
+  roles:
+  - kvm-networking
