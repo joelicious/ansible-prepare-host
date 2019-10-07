@@ -8,5 +8,4 @@
   become: yes
 
   roles:
-  - cockpit
-  - kvm-networking
+  - subscription-manager

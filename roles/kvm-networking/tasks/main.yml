@@ -1,18 +1,16 @@
 ---
 # This role installs kvm-networking and configures it.
+#
+# Note: An attempt was made to use the ansible nmcli module.
+#       This module has a dependency on the NetworkManager-glib 
+#       which has been removed from repositories. Instead
+#       of trying to apply the patches, decided to abandon
+#       the use of this module for now.
+#
 
-- set_fact:
-    bridge_slave: "{{ ansible_interfaces | difference(['lo','br0']) | first }}"
+- name: Create a network bridge named br0
+  command: nmcli con add ifname br0 type bridge con-name br0
 
-- name: Add new connection to the network configuration.
-  nmcli: 
-    state: present
-    type: bridge
-    conn_name: br0
+- name: Establish a bridge slave interface between physical and bridge connection
+  command: nmcli con add type bridge-slave ifname eno1 master br0
 
-- name: Establish bridge slave interface between physical and bridge
-  nmcli: 
-    state: present
-    type: bridge-slave
-    conn_name: "{{ bridge_slave }}"
-    master: br0

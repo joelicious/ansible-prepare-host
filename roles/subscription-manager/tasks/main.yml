@@ -1,0 +1,51 @@
+---
+
+- debug:
+    msg: System RHN username {{ rhsm_username }} RHN password {{ rhsm_password }} RHN pool id {{ rhsm_pool_id }}
+
+- name: Manage Red Hat Subscription; register the server
+  shell: subscription-manager register --username {{ rhsm_username }} --password {{ rhsm_password }} --auto-attach --force
+
+- name: Manage Red Hat Subscription; attach the pool id
+  shell: subscription-manager attach --pool={{ rhsm_pool_id }}
+
+- name: Install the latest updates
+  dnf: name=* state=latest
+
+
+# There was an attempt to use the redhat_subscription module, but
+# there appears to be an incompatibility between this module and
+# RHEL8.  
+
+# - name: RHSM set config server.prefix
+#   shell: subscription-manager config --server.prefix="/subscription"
+
+# - name: RHSM set config server.port
+#   shell: subscription-manager config --server.port="443"
+
+# - name: Manage Red Hat Subscription; register the server
+#   redhat_subscription:
+#     state: present
+#     username: "{{ rhsm_username }}"
+#     password: "{{ rhsm_password }}"
+#     auto_attach: true
+#     server_hostname: subscription.rhsm.redhat.com
+#     server_insecure: yes
+#     rhsm_baseurl: https://cdn.redhat.com
+#     force_register: yes
+
+# - name: Specific pool by ID
+#   redhat_subscription: 
+#     state: present
+#     username: "{{ rhsm_username }}"
+#     password: "{{ rhsm_password }}"
+#     pool_ids: "{{ rhsm_pool_id }}"
+#     server_hostname: subscription.rhsm.redhat.com
+#     server_insecure: yes
+#     rhsm_baseurl: https://cdn.redhat.com
+#     force_register: yes
+#     server_proxy_hostname: default(omit)
+#     server_proxy_port: default(omit)
+#     server_proxy_user: default(omit)
+#     server_proxy_password: default(omit)
+

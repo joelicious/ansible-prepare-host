@@ -1,0 +1,7 @@
+---
+# User account used to ssh the hosts
+
+remote_user: joe
+rhsm_username: "{{ lookup('env', 'RHN_USERNAME')}}"
+rhsm_password: "{{ lookup('env', 'RHN_PASSWORD')}}"
+rhsm_pool_id: "{{ lookup('env', 'RHN_POOL_ID')}}"
